@@ -154,6 +154,7 @@ class DeviceUseRate(models.Model):
         return {u'date':self.date.strftime("%m-%d"),u'rate':self.rate}
 
     class Meta:
+
         db_table = 'DeviceUseRate'
 
 class DeviceToSensor(models.Model):
