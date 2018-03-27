@@ -164,7 +164,7 @@ class DeviceToSensor(models.Model):
 
 class DeviceType(models.Model):
     #typeid = models.IntegerField(db_column="TypeId", blank=True, null=True)  # 设备类型id
-    school = models.IntegerField(db_column="school",blank=True,null=True)
+    school = models.IntegerField(db_column="school",blank=True,null=True) #学校
     typename = models.CharField(db_column="TypeName",max_length=30,blank=True,null=True)  #设备名称
 
     def __str__(self):
