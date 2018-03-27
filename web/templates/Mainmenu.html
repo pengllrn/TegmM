@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>主界面</title>
+		  <!-- Bootstrap core CSS -->
+        {% load static %}
+        <link href="{% static "web/css/bootstrap.min.css" %}" rel="stylesheet">
+        <link href="{% static "web/css/mainmenu.css" %}" rel="stylesheet">
+        <script src="{% static "web/js/jquery-3.2.1.js" %}" type="text/javascript"></script>
+        <script src="{% static "web/js/bootstrap.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "web/js/Chart.js" %}" type="text/javascript"></script>
+    <!-- Custom styles for this template -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=jMPSBpzhvQ1b4Qn8IPV5Sd1eVGYmjxAx"></script>
+	</head>
+ <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">设备管理系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a id="username">欢迎您，</a></li>
+              <li><a href="#">设置</a></li>
+              <li><a href="#">登出</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href={% url 'webapp:signin' %}>主界面 <span class="sr-only">(current)</span></a></li>
+            <li><a href={% url 'webapp:deviceInfoInit' %}>设备信息查询</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href={% url 'webapp:summary'  %}>设备信息统计</a></li>
+            <li><a href="">简报统计生成</a></li>
+            <li><a href="">3</a></li>
+            <li><a href="">4</a></li>
+            <li><a href="">5</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div id="allmap" style="width: 100%;height: 680px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript">
+	// 百度地图API功能
+    var Data={{ gis_info|safe }};
+    //Data里面最后一个放的是uername？
+    $("#username").html("欢迎您，"+Data[Data.length-1].username)
+	var map = new BMap.Map("allmap");
+    //计算平均经纬度
+	var arrangeLongt=0.000;
+	for (var i=0;i<Data.length;i++)
+	{
+	    arrangeLongt=+parseFloat(Data[i].longitude);
+	}
+	arrangeLongt=arrangeLongt/Data.length;
+	var arrangeLat=0.00;
+	for (var i=0;i<Data.length;i++)
+	{
+	    arrangeLat=+Data[i].latitude;
+	}
+	var opts = {
+				width : 250,     // 信息窗口宽度
+				height: 80,     // 信息窗口高度
+				title : "学校信息" , // 信息窗口标题
+				enableMessage:true//设置允许信息窗发送短息
+			   };
+	arrangeLat=arrangeLat/(Data.length+1);
+	var point = new BMap.Point(Data[0].latitude,Data[0].longitude);
+	map.centerAndZoom(point,10);
+for (var i=0;i<Data.length;i++)
+	{
+	   var marker = new BMap.Marker(new BMap.Point(Data[i].latitude,Data[i].longitude));
+	   var schoolname=Data[i].schoolname;
+	   var content = Data[i].schoolname+"："+Data[i].message+"个设备使用中";
+	    map.addOverlay(marker);    //增加点
+        addClickHandler(schoolname,content,marker);
+	}
+	function addClickHandler(schoolname,content,marker) {
+        marker.addEventListener("mouseover", function (e) {
+                openInfo(content, e)
+            }
+        );
+        marker.addEventListener("click",function(e){
+        			$.get("{% url "webapp:maptoschool" %}",{
+        			    schoolname:schoolname
+        			},function (data,status) {
+                        var sid=data.schoolid;
+                        window.location="/webbs/device_info/"+sid;
+                    });
+        	});
+    }
+	function openInfo(content,e){
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+		map.openInfoWindow(infoWindow,point); //开启信息窗口
+	}
+</script>
+  </body>
+</html>

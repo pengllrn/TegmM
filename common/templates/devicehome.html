@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备管理系统主页</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="../../static/css/jquery.treeview.css">
+    <script src="../../static/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../../static/jquery/jquery-3.0.0.min.js" type="text/javascript"></script>
+    <script src="../../static/jquery/jquery.treeview.js" type="text/javascript"></script>
+    <style type="text/css">
+        b {
+            text-align: center
+        }
+
+        tabtop13a {
+            margin-top: 13px;
+            text-align: center;
+
+        }
+
+        .tabtop13a td {
+            background-color: #ffffff;
+            height: 25px;
+            line-height: 150%;
+            text-align: center;
+
+        }
+
+        .biaotia {
+            font-family: 微软雅黑;
+            font-size: 26px;
+            font-weight: bold;
+
+            color: #255e95;
+        }
+
+        .btbga {
+            background: #e9faff !important;
+        }
+
+        .font-centera {
+            text-align: center
+        }
+
+        .titfonta {
+            font-family: 微软雅黑;
+            font-size: 16px;
+            font-weight: bold;
+            color: #255e95;
+            background-color: #255e95;
+        }
+
+        .biaoti {
+            font-family: 微软雅黑;
+            font-size: 26px;
+            font-weight: bold;
+            border-bottom: 1px dashed #CCCCCC;
+            color: #255e95;
+        }
+
+        .btbg {
+            background: #e9faff !important;
+        }
+
+        .font-center {
+            text-align: center
+        }
+
+        .titfont {
+            font-family: 微软雅黑;
+            font-size: 16px;
+            font-weight: bold;
+            color: #255e95;
+            background-color: #255e95;
+        }
+
+        .size {
+            font-size: 21px;
+            color: rgba(128, 128, 128, 0.87);
+        }
+
+        .ta {
+            position: relative;
+            text-align: center;
+        }
+
+        .f {
+
+            background-color: #bffaff;
+            position: relative;
+            border-radius: 10px;
+            width: 400px;
+            margin: 0 auto;
+            padding: 30px 0 30px 0;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .f1 {
+            position: relative;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+            color: #255e95;
+        }
+
+        .super1 {
+            cursor: pointer;
+        }
+
+        p {
+            position: relative;
+            padding: 15px 10px 10px 20px;
+            margin: -20px -8px 15px;
+            font-size: 30px;
+            background-color: #bee7ff;
+
+        }
+
+        p3 {
+            text-align: center;
+            color: rgba(128, 128, 128, 0.87);
+            font-size: 30px;
+        }
+
+        .bgc {
+            text-shadow: none;
+            border-radius: 3px;
+            border: 1px solid rgba(128, 128, 128, 0.35);
+            height: 22px;
+        }
+
+        .small {
+            width: 171.1px;
+            height: 27px;
+            position: relative;
+            cursor: pointer;
+            border-radius: 3px;
+            border-color: rgba(128, 128, 128, 0.35);
+        }
+
+        .sub1 {
+            cursor: pointer;
+            border-radius: 3px;
+            border: none;
+            background-color: #4c50ff;
+            color: white;
+            height: 30px;
+            position: relative;
+            width: 50px;
+
+        }
+
+        .sub {
+            text-align: center
+        }
+
+        aa {
+            color: red;
+            text-align: center;
+            font-size: 20px;
+        }
+        .note1{
+            margin: 0px 70px ;
+        }
+    </style>
+</head>
+<body>
+<p>Table of User Authority</p>
+
+<script type="text/javascript">
+    function blanktext() {
+        var a = document.getElementById("filed1").value;
+        var b = document.getElementById("filed2").value;
+        var c = document.getElementById("filed3").value;
+
+
+        if (a == "" || b == "" || c == "") {
+            alert("信息输入不能为空");
+            return false
+        }
+        else {
+            var reg = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
+            if (!reg.test(b)||!reg.test(c))
+            {alert("提示信息：您输入的楼层名或房间名含有非法字符！");
+
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    function blanktext1() {
+        var a = document.getElementById("fileda").value;
+        var b = document.getElementById("filedb").value;
+        var c = document.getElementById("filedc").value;
+        var d = document.getElementById("filedd").value;
+        var e = document.getElementById("filede").value;
+
+
+        if (a == "" || b == "" || c == "" || d == "" || e == "") {
+            alert("信息输入不能为空");
+            return false
+        }
+       else {
+            var reg1 = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
+            var reg = /^[\u4e00-\u9fa5]+$/;
+            if (!reg.test(a))
+            {alert("提示信息：您输入的学校含有非法字符！");
+
+                return false;
+            }
+            if (!reg1.test(b))
+            {alert("提示信息：您输入的学校注册号有非法字符！");
+
+                return false;
+            }
+            return true;
+        }
+    }
+
+    function blanktext2() {
+        var a = document.getElementById("User1").value;
+        var b = document.getElementById("User2").value;
+        var c = document.getElementById("User3").value;
+        var d = document.getElementById("User4").value;
+        var e = document.getElementById("User5").value;
+
+        var f = document.getElementById("User6").value;
+        var g = document.getElementById("User7").value;
+
+        var h = document.getElementById("User8").value;
+        var i = document.getElementById("User9").value;
+
+
+        if (a == "" || b == "" || d == "" || e == "" || g == "" || h == "" || i == "" || f == "" || c == "" ) {
+            alert("信息输入不能为空");
+            return false
+        }
+        else {
+            var reg = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
+            var reg1=/^[a-zA-Z0-9]+$/;
+            var reg2 = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+            var reg3 = /^[\u4e00-\u9fa5]+$/;
+
+
+            if (!reg1.test(a))
+            {alert("提示信息：您输入的账号含有非法字符！");
+
+                return false;
+            }
+            if (reg3.test(b))
+            {alert("提示信息：您输入的密码含有非法字符！");
+
+                return false;
+            }
+            if (!reg2.test(c))
+            {alert("提示信息：您输入的姓名含有非法字符！");
+
+                return false;
+            }
+            if (!reg3.test(e))
+            {alert("提示信息：您输入的学校含有非法字符！");
+
+                return false;
+            }
+            return true;
+        }
+    }
+
+    function blanktext3() {
+        var a = document.getElementById("text1").value;
+        var b = document.getElementById("text2").value;
+        var c = document.getElementById("text3").value;
+
+
+        if (a == "" || b == "" || c == "") {
+            alert("信息输入不能为空");
+            return false
+        }
+         else {
+            var reg = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
+            var reg1=/^[a-zA-Z0-9]+$/;
+             var reg2 = /^[0-9]+$/;
+            if (!reg1.test(a))
+            {alert("提示信息：您输入的设备编号含有非法字符！");
+                return false;
+            }
+            if (!reg1.test(c))
+            {alert("提示信息：您输入的传感器编号含有非法字符！");
+
+                return false;
+            }
+            return true;
+        }
+    }
+
+
+    function conserve() {
+        var a = document.getElementById("t").value;
+
+
+        if (a == "") {
+            alert("信息输入不能为空");
+            return false
+        }
+        else {
+            var reg = /^[\u4e00-\u9fa5]+$/;
+
+            if (!reg.test(a))
+            {alert("提示信息：您输入的数据含有非法字符！");
+
+                return false;
+            }
+            return true;
+        }
+    }
+</script>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+        <td align="center" class="biaoti" height="60">用户权限表</td>
+    </tr>
+    <tr>
+        <td align="right" height="25"></td>
+    </tr>
+</table>
+
+<table width="90%" border="0" cellspacing="1" cellpadding="3" bgcolor="#cccccc" class="tabtop13" align="center">
+    <tr>
+        <td width="10%" class="btbg font-center titfont" rowspan="2" id="shcool"><a>添加学校</a></td>
+        <td width="10%" class="btbg font-center titfont" rowspan="2" id="adddevicetype"><a>添加设备类型</a></td>
+        <td width="10%" class="btbg font-center titfont" rowspan="2" id="room"><a>添加房间</a></td>
+        <td width="10%" class="btbg font-center titfont" rowspan="2" id="adduser"><a>添加用户</a></td>
+        <td width="10%" class="btbg font-center titfont" rowspan="2" id="addlook"><a>报废处理</a><br></td>
+        <td width="10%" class="btbg font-center titfont super1" rowspan="2" id="adddeviceinfo"><a>添加设备信息</a><br></td>
+        <td width="10%" class="btbg font-center titfont super1" rowspan="2" id="super">超级管理员</td>
+
+    </tr>
+</table>
+<br>
+<div class="f" id="addschool">
+    <p3>添加学校</p3>
+    <hr style=" height:2px;border:none;border-top:2px solid rgba(128,128,128,0.35);"/>
+    <form method="post" action="{% url 'school' %}" class="f1">
+        {% csrf_token %}
+        <table class="ta" width="320px" align="center">
+            <label>
+
+            </label>
+
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校名字：</td>
+                    <td height="35px"><input type="text" name="schoolname" id="fileda" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10" minlength="4"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校注册号：</td>
+                    <td height="35px"><input type="text" name="schoolregister" id="filedb" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10"  /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校的状态:</td>
+                    <td height="35px"><input type="number" name="schoolstatus" id="filedc" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>5)value=value.slice(0,5)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校负责人id:</td>
+                    <td height="35px"><input type="number" name="schoolresper" id="filedd" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>5)value=value.slice(0,5)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校联系电话:</td>
+                    <td height="35px"><input type="number" name="schooltel" id="filede" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>11)value=value.slice(0,11)" /></td>
+                </tr>
+            </label>
+            <br>
+        </table>
+        <label>
+            <input type="reset" value="重&nbsp;置" class="sub"/>
+        </label>
+        &nbsp; &nbsp; &nbsp;
+        <label>
+            <input type="submit" value="保&nbsp;存" onclick="return blanktext1()" class="sub"/>
+        </label>
+
+    </form>
+</div>
+<div class="f" id="addroom">
+    <p3>添加房间</p3>
+    <hr style=" height:2px;border:none;border-top:2px solid rgba(128,128,128,0.35);"/>
+    <form method="post" action="{% url 'room' %}" class="f1">
+        {% csrf_token %}
+        <table class="ta" width="320px" align="center">
+
+            <label>
+                <tr>
+                    <td height="35px" class="size">学校id：</td>
+                    <td height="35px"><input type="number" name="schoolid" id="filed1" class="bgc"
+                    onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>5)value=value.slice(0,5)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">楼层名：</td>
+                    <td height="35px"><input type="text" name="building" id="filed2" class="bgc"
+                    onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">房间名:</td>
+                    <td height="35px"><input type="text" name="roomname" id="filed3" class="bgc" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10"/></td>
+                </tr>
+            </label>
+
+            <br>
+        </table>
+        <label>
+            <input type="reset" value="重&nbsp;置" class="sub"/>
+        </label>
+        &nbsp; &nbsp; &nbsp;
+        <label>
+            <input type="submit" value="保&nbsp;存" onclick="return blanktext()" class="sub"/>
+        </label>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#shcool").hide();
+                $("#adddevicetype").hide();
+                $("#addschool").hide();
+                $("#addroom").hide();
+                $("#user").hide();
+                $("#deviceinfo").hide();
+                $("#devicetype").hide();
+                $("#look").hide();
+            });
+
+            $("#super").click(function () {
+                $("#note").hide();
+                $("#shcool").show();
+                $("#adddevicetype").show()
+            });
+            $("#shcool").click(function () {
+                $("#note").hide();
+                $("#addschool").show();
+                $("#addroom").hide();
+                $("#user").hide();
+                $("#deviceinfo").hide();
+                $("#devicetype").hide();
+                $("#look").hide();
+            });
+            $("#room").click(function () {
+                $("#note").hide();
+                $("#addschool").hide()
+                $("#addroom").show()
+                $("#deviceinfo").hide()
+                $("#user").hide()
+                $("#devicetype").hide();
+                $("#look").hide();
+            });
+            $("#adduser").click(function () {
+                $("#note").hide();
+                $("#addschool").hide()
+                $("#addroom").hide()
+                $("#user").show()
+                $("#deviceinfo").hide()
+                $("#devicetype").hide();
+                $("#look").hide();
+            });
+            $("#adddeviceinfo").click(function () {
+                $("#note").hide();
+                $("#addschool").hide()
+                $("#addroom").hide()
+                $("#user").hide()
+                $("#deviceinfo").show()
+                $("#devicetype").hide();
+                $("#look").hide();
+            });
+            $("#adddevicetype").click(function () {
+                $("#note").hide();
+                $("#addschool").hide()
+                $("#addroom").hide()
+                $("#user").hide()
+                $("#deviceinfo").hide()
+                $("#devicetype").show();
+                $("#look").hide();
+            });
+            $("#addlook").click(function () {
+                $("#note").hide();
+                $("#addschool").hide()
+                $("#addroom").hide()
+                $("#user").hide()
+                $("#deviceinfo").hide()
+                $("#devicetype").hide();
+                $("#look").show();
+            });
+
+        </script>
+    </form>
+</div>
+
+<div class="f" id="user">
+    <p3>账号注册</p3>
+    <hr style=" height:2px;border:none;border-top:2px solid rgba(128,128,128,0.35);"/>
+    <form class="f1" action="{% url 'alter2' %}" method="post">
+        <table class="zhuce" align="center">
+
+
+            <label>
+                <tr>
+                    <td class="size">账&nbsp;号</td>
+                    <td class="size"><input type="text" id="User1" name="login_id" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="18"
+                    /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size">密&nbsp;码</td>
+                    <td class="size"><input type="text" id="User2" name="password" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="18"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size">姓&nbsp;名</td>
+                    <td class="size"><input type="text" id="User3" name="username" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="5"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size">用户类型</td>
+                    <td class="size"><input type="number" id="User4" name="usertype" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>1) value=value.slice(0,1) " /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size"> 学&nbsp;校</td>
+                    <td class="size"><input type="text" id="User5" name="school" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10"/></td>
+                </tr>
+            </label>
+
+            <label>
+                <tr>
+                    <td class="size">电子邮箱</td>
+                    <td class="size"><input type="email" id="User6" name="email" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>18)value=value.slice(0,18)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size">电&nbsp;话</td>
+                    <td class="size"><input type="number" id="User7" name="tel" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>12)value=value.slice(0,11)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size"> 微&nbsp;信</td>
+                    <td class="size"><input type="text" id="" name="weichat" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="18"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size"> Q&nbsp;Q</td>
+                    <td class="size"><input type="number" id="" name="qq" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>11)value=value.slice(0,11)" /></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size"> 权限名称</td>
+                    <td class="size"><input type="number" id="User8" name="authorityname" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>10)value=value.slice(0,10)"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td class="size">权限代码</td>
+                    <td class="size"><input type="number" id="User9" name="authoritycode" class="bgc"
+                                            onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>10)value=value.slice(0,10)"/></td>
+                </tr>
+            </label>
+        </table>
+        <label>
+            <br>
+            <input type="submit" value="保&nbsp;存" class="baocun" onclick="return blanktext2()"/>&nbsp;&nbsp;
+            <input type="reset" value="重&nbsp;置" class="chongzhi">
+        </label>
+
+    </form>
+</div>
+
+<div class="f" id="deviceinfo">
+    <p3>添加设备信息系统</p3>
+    <hr style=" height:2px;border:none;border-top:2px solid rgba(128,128,128,0.35);"/>
+    <form method="post" action="{% url 'alter' %}" class="f1">
+        {% csrf_token %}
+        <table class="ta" width="320px" align="center">
+            <label>
+                <tr>
+                    <td height="30px" class="size" id="devicename" >设备名称：</td>
+                    <td>
+                        <select class="small" name="devicename+" id="111">
+                            <option value="" selected=" selected "></option>
+                            {% for dtypes in dtype %}
+                                <option value="{{ dtypes.typename }}" >{{ dtypes.typename }}</option>
+                            {% endfor %}
+                        </select></td>
+                </tr>
+            </label>
+
+            <label>
+                <tr>
+                    <td height="35px" class="size">设备编号：</td>
+                    <td height="35px"><input type="text" name="number" id="text1" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="18"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">设备单价：</td>
+                    <td height="35px"><input type="number" name="univalence" id="text2" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" oninput="if(value.length>7) value=value.slice(0,7)"/></td>
+                </tr>
+            </label>
+            <label>
+                <tr>
+                    <td height="35px" class="size">传感器编号:</td>
+                    <td height="35px"><input type="text" name="sensorid" id="text3" class="bgc"
+                                             onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="18"/></td>
+                </tr>
+            </label>
+            <br>
+        </table>
+        <label>
+            <input type="reset" value="重&nbsp;置" class="sub"/>
+        </label>
+        &nbsp; &nbsp; &nbsp;
+        <label>
+            <input type="submit" value="保&nbsp;存" onclick="return blanktext3()" class="sub"/>
+        </label>
+
+    </form>
+</div>
+
+<div class="f" id="devicetype">
+    <p3>添加设备类型</p3>
+    <hr style=" height:2px;border:none;border-top:2px solid rgba(128,128,128,0.35);"/>
+    <form method="post" action="{% url 'alter4' %}" class="f">
+        {% csrf_token %}
+        <table align="center">
+            <tr>
+                <label>
+                    <td align="center" class="size">设备类型：</td>
+                    <td><input type="text" placeholder="请输入设备类型" class="bgc" id="t" name="typename"
+                               onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="10"/></td>
+                </label>
+            </tr>
+
+        </table>
+        <br>
+        <label>
+            <input type="submit" value="保存" class="sub" onclick="return conserve()">
+        </label>
+    </form>
+</div>
+
+<div id="look">
+    <ul id="tree" class="filetree treeview-famfamfam">
+        <li class="folder"><span class="folder">系统设备信息查询</span>
+
+            <ul>
+                {% for dtypes in dtype %}
+
+                    <li><span class="folder" id="{{ dtypes.id }}">{{ dtypes.typename }}</span>
+
+                        <ul>
+                            <li><span class="file" id="s{{ dtypes.id }}" style="cursor: pointer">{{ dtypes.typename }}信息表</span>
+                            </li>
+                        </ul>
+
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </li>
+    </ul>
+
+    <script type="text/javascript">
+        function del1() {
+            if (confirm("您确定要删除这些内容吗？删除之后将不再显示！") == false) {
+                return false
+            }
+        }
+    </script>
+
+    <form method="post" action="{% url 'dele' %}" class="sub">
+        {% csrf_token %}
+        {% for dtypes in dtype %}
+            <div id="d{{ dtypes.id }}" align="center">
+                <script type="text/javascript">
+
+                    document.write("</br>");
+                    document.write("<table id='t{{ dtypes.id }}' width='80%' border='0' cellspacing='0' cellpadding='0' align='center'>")
+                    document.write("<tr> <td  align='center' class='biaotia' height='60'>{{ dtypes.typename }}信息表</td> </tr> ")
+
+                    document.write("</table>")
+                    document.write("<table class='tabtop13a' id='myTable'  width='80%' border='0' align='center' cellspacing='1' cellpadding='4' bgcolor='#cccccc'>")
+                    document.write("<td class='btbga font-centera titfonta'>检查人</td>")
+                    document.write("<td class='btbga font-centera titfonta'>设备编号</td>")
+                    document.write("<td class='btbga font-centera titfonta'>学校id</td>")
+                    document.write("<td class='btbga font-centera titfonta'>传感器id</td>")
+                    document.write("<td class='btbga font-centera titfonta'>设备单价</td>")
+                    document.write("<td class='btbga font-centera titfonta'>选择栏</td>")
+                    document.write("<tr>")
+
+
+                    var a = "{{ dtypes.id }}";
+                    {% for infos in info %}
+                        var b = "{{ infos.status }}"
+                        if ((a =={{ infos.typeid }}) && b == 3) {
+                            document.write("<tr>")
+                            document.write("<td>{{ infos.checkername }}</td>")
+                            document.write("<td>{{ infos.number }}</td>")
+                            document.write("<td>{{ infos.schoolid }}</td>")
+                            document.write("<td>{{ infos.sensorid }}</td>")
+                            document.write("<td>{{ infos.univalence }}</td>")
+                            document.write(" <td><input type='checkbox' value='{{ infos.number }}' name='checkbox1' id='tyy'></td>")
+
+                        }
+                    {% endfor %}
+
+                    document.write("</tr>")
+                    document.write("</table>")
+
+                </script>
+            </div>
+        {% endfor %}
+        <br>
+        <b><input type='submit' value='删&nbsp;除' onclick="return del1()" id="del11" class="sub1"></b>
+    </form>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#tree").treeview({
+                toggle: function () {
+                    console.log("%s was toggled.", $(this).find(">span").text());
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            {% for dtypes in dtype %}
+                $("#d{{ dtypes.id }}").hide();
+            {% endfor %}
+            $("#del11").hide()
+        });
+
+        $(document).ready(function ()
+        {
+
+            {% for dtypes in dtype  %}
+
+                $("#s{{ dtypes.id }}").click(function () {
+                    {% for dtypes2 in dtype %}
+                        $("#d{{ dtypes2.id }}").hide();
+                    {% endfor %}
+
+                    $("#d{{ dtypes.id }}").show();
+                    $("#del11").show()
+                });
+                $("#{{ dtypes.id }}").click(function () {
+                    if ($("#d{{ dtypes.id }}").is(":visible")) {
+                        $("#del11").hide()
+                    }
+                    $("#d{{ dtypes.id }}").hide()
+
+                });
+            {% endfor %}
+
+
+            if ( 2 == {{ user }} )
+            {
+                $("#super").hide()
+            }
+
+        } );
+    </script>
+</div>
+<div class="note1">
+<aa id="note">{{ error }}{{ error1 }}{{ error2 }}{{ error3 }}{{ error4 }}</aa>
+</div>
+</body>
+</html>

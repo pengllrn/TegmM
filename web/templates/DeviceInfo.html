@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备信息查询</title>
+      <!-- Bootstrap core CSS -->
+        {% load static %}
+        <link href="{% static "web/css/bootstrap.min.css" %}" rel="stylesheet">
+        <link href="{% static "web/css/mainmenu.css" %}" rel="stylesheet">
+        <script src="{% static "web/js/jquery-3.2.1.js" %}" type="text/javascript"></script>
+        <script src="{% static "web/js/bootstrap.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "web/js/Chart.js" %}" type="text/javascript"></script>
+</head>
+<body>
+    <nav id="header" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">设备管理系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a id="username">欢迎您，</a></li>
+              <li><a href="#">设置</a></li>
+              <li><a href="#">登出</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li ><a href={% url 'webapp:signin' %}>主界面 </a></li>
+            <li class="active"><a href={% url 'webapp:deviceInfoInit' %}>设备信息查询<span class="sr-only">(current)</span></a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href={% url 'webapp:summary'  %}>设备信息统计</a></li>
+            <li><a href="">简报统计生成</a></li>
+            <li><a href="">3</a></li>
+            <li><a href="">4</a></li>
+            <li><a href="">5</a></li>
+          </ul>
+        </div>
+      </div>
+          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main ">
+              <div id="container1" class="col-md-8"  >
+                  <div id="container" style="height: 30px;width: 300px">
+                  <div style="float:left;height: 30px;width: 150px">
+                      <h4>选择设备类型选择</h4>
+                  </div>
+                  <div style="float:left;height: 30px;width: 150px">
+                      <select class="filter  form-control" id="deviceTypeSelector" onchange="selectOnChange(this)"></select>
+                  </div>
+                  </div>
+                  <h3>设备列表</h3>
+                  <div id="tableWindow" style="overflow:scroll">
+                      <div id="Searchresult" style="margin: 0px 0px;padding: 0px 0px;list-style-type: none;"></div>
+                  </div>
+              </div>
+               <div id="informationwindow" class="col-md-4 " >
+                    <h3 class="informationTitle" hidden>详细信息</h3>
+                    <h4 class="informationTitle" hidden>设备使用情况（使用时长）</h4>
+                   <div id="timeSelect" class="row " >
+                        <select id="yearSelect" hidden style="height: 20px"></select>
+                        <select id="monthSelect" hidden style="height: 20px"></select>
+                   </div>
+                   <div id="lineContainer" class="row " >
+                       <canvas id="canvas" height="350" width="450"></canvas>
+                   </div>
+                    <h4 class="informationTitle" hidden>设备信息</h4>
+                   <div id="infoTable" class="row " ></div>
+              </div>
+          </div>
+    </div>
+</body>
+<script>
+    $("#tableWindow").css("height",$(window).height()-$("#header").height());
+    var Data={{ detailsInfo|safe }};
+    $("#username").html("欢迎您，"+Data[Data.length-1].username);
+    $("#deviceTypeSelector").append($('<option class="deviceTypeSelector" >请选择设备类型</option>'));
+    $("#deviceTypeSelector").append($('<option class="deviceTypeSelector" value="0">全部</option>'));
+     for (var i=0;i<Data.length-1;i++) {
+         $("#deviceTypeSelector").append($('<option class="deviceTypeSelector"></option>'));
+         $(".deviceTypeSelector").eq(i+2).html(Data[i].devicetype);
+         $(".deviceTypeSelector").eq(i+2).attr('value', Data[i].typeid);
+     }
+
+     function selectOnChange(obj) {
+         var devicetype=obj.selectedIndex-1;
+         $("#Searchresult").empty();
+         $("#tabledetails").empty();
+         $.ajax({
+             url:"{% url "webapp:getDevices" %}",  //发出请求的地址
+                    data:{devicetype:devicetype},
+                    success:function(result) {
+                 var Data=JSON.parse(result);
+                 $.each(Data,function(i){
+                                        $("#Searchresult").append(
+                                           ' <li><div class="equipment_tag" style="background-color:aqua; height: 80px; width:470px;float:left;margin: 10px 10px 0;outline:groove;outline-color: deepskyblue;">'+
+                                            '<span id="type_id_mark'+ i +'"></span>'+
+                                            '<div class="content" style="background-color:aqua;font-size: 1.0em;height:80px;width:auto;float: left ">'+
+                                            '<span id="use_flag_mark'+ i +'"></span>'+
+                                           '<br/>学校:'+ Data[i].schoolid +'&nbsp&nbsp&nbsp 房间:'+ Data[i].roomid+' &nbsp&nbsp&nbsp 设备序号: '+ Data[i].devicenum+
+                                           '<br/>设备名称:'+ Data[i].devicename+'&nbsp&nbsp&nbsp 设备ID:'+ Data[i].deviceid+
+                                            '</div></div></li>'
+                                          );
+                                        $(".equipment_tag").eq(i).attr("deviceid",Data[i].deviceid);
+                                        {# 判断设备类型#}
+                                       if (Data[i].typeid == 1){
+                                           $("#type_id_mark"+i).append('<div class="PCtag" style="background-color: #EEEEEE ;height:100px;width:100px;margin: 5px 5px 0;float:left;"><img src="/static/web/images/icon_PC.jpg"> 电脑</div>');}
+                                       else if (Data[i].typeid == 2){
+                                           $("#type_id_mark"+i).append('<div class="ACtag" style="background-color: #EEEEEE ;height:100px;width:100px;margin: 5px 5px 0;float:left;"><img src="/static/web/images/icon_AC.jpg"> 空调</div>');}
+                                       else if (Data[i].typeid == 3){
+                                           $("#type_id_mark"+i).append('<div class="PJtag" style="background-color: #EEEEEE ;height:100px;width:100px;margin: 5px 5px 0;float:left;"> <img> src="/static/web/images/icon_PJ.jpg">投影仪</div>');}
+                                       {# 判断使用情况#}
+                                            if (Data[i].useflag === 3){$("#use_flag_mark"+i).append( '<span class="has-warning">(警报)</span>');}
+                                            else if (Data[i].useflag === 1){ $("#use_flag_mark"+i).append('<span style="background-color: green ;">(正在使用)</span>');}
+                                            else if (Data[i].useflag === 2){ $("#use_flag_mark"+i).append('<span style="background-color: yellow ;">(未使用)</span>');}
+                                            else if (Data[i].useflag === 4){ $("#use_flag_mark"+i).append('<span style="background-color: gray ;">(报废)</span>');}
+    {#                                        if (Data[i].UseFlag === true){$("#use_flag_mark"+i).append( '<span style="background-color: green ;">(正在使用)</span>');}#}
+    {#                                        else if (Data[i].UseFlag === false){ $("#use_flag_mark"+i).append('<span style="background-color: red ;">(未使用)</span>');}#}
+                                    });
+                 $(".equipment_tag").click(function() {
+                     $(".informationTitle").show();
+                     var deviceid=$(this).attr("deviceid");
+                     $.ajax({
+                             url:"{% url "webapp:getDeviceLine" %}",  //发出请求的地址
+                             data:{deviceid:deviceid},
+                         success:function(result) {
+                                  var lineData=JSON.parse(result);
+                                  var newlabel=lineData[0].newlabel;
+                                  var newdata=lineData[0].newdata;
+                                  var years=lineData[0].year;
+                                  var lineChartDataNew = {
+                                  labels : newlabel,
+                                  datasets : [
+                                    {
+                                        label: "New datasets",
+                                        fillColor : "rgba(151,187,205,0.2)",
+                                        strokeColor : "rgba(151,187,205,1)",
+                                        data :newdata
+                                    },
+                                  ]};
+                                   $("#infoTable").append(
+                                       '<table class="table"><thead><tr><th>设备名称</th><th>设备编号</th><th>房间编号</th>' +
+                                       '<th>使用状态</th><th>单价</th></tr></thead>'+
+                                       '<tbody><tr><td>' + lineData[1].devicename +'</td><td>'+lineData[1].devicenum
+                                 +'</td><td>'+ lineData[1].roomid+'</td><td>'+lineData[1].useflag+'</td><td>'+
+                                  lineData[1].univ +'</td></tr></tbody></table>'
+                                   );
+                                  $("#monthSelect").show();
+                                  $("#yearSelect").show();
+                                  $("#timeSelect").append('<button id="selectConfirm" type="button" ' +
+                                      'class="btn btn-default">确定</button>');
+                                  $("#monthSelect").append('<option class="month">all</option>');
+                                  $(".month").eq(0).attr("value",0);
+                                  for(var i=0;i<newlabel.length;i++){
+                                      $("#monthSelect").append('<option class="month">'+newlabel[i]+'</option>');
+                                      $(".month").eq(i+1).attr("value",i+1);
+                                  }
+                                  for(var j=0;j<years.length;j++){
+                                       $("#yearSelect").append('<option class="year">'+years[j]+'</option>');
+                                      $(".year").eq(j).attr("value",years[j]);
+                                  }
+                                  var ctx = document.getElementById("canvas").getContext("2d");
+                             window.myLine = new Chart(ctx).Line(lineChartDataNew);
+                                  $("#selectConfirm").click(function () {
+                                      window.myLine.destroy();
+                                      var year=$("#yearSelect option:selected").val();
+                                      var month=$("#monthSelect option:selected").val();
+                                      $.ajax({                    //调用ajax
+                                           url:"{% url "webapp:getDeviceLineAjax" %}",  //发出请求的地址
+                                           data:{year:year,month:month},
+                                          success:function(result){
+                                               var Data=JSON.parse(result);
+                                               var newlabel=Data.newlabel;
+                                               var newdata=Data.newdata;
+                                               var lineChartDataNew = {
+                                                   labels : newlabel,
+                                                   datasets : [
+                                                    {
+                                                        label: "New datasets",
+                                                        fillColor : "rgba(151,187,205,0.2)",
+                                                        strokeColor : "rgba(151,187,205,1)",
+                                                        data :newdata
+                                                    },
+                                                ]
+                                               };
+                                                window.myLine = new Chart(ctx).Line(lineChartDataNew);
+                                                }
+                                  })
+
+                    });
+                 }
+                    });
+         });
+     }
+         });
+     }
+
+</script>
+</html>

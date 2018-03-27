@@ -1,0 +1,8 @@
+快捷键:
+Alt+Enter:快速生成变量
+Ctrl+Alt+F:自动生成全局变量
+Ctrl+P:提示函数参数
+
+
+查询本地已解析的域名
+C:\Windows\System32\drivers\etc
